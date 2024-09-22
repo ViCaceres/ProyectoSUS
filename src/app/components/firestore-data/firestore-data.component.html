@@ -1,0 +1,38 @@
+<!-- firestore-data.component.html -->
+
+
+<ion-list>
+  <ion-item *ngFor="let cliente of clientes">
+    {{ cliente.nombre }} - {{ cliente.rut }} - {{cliente.id}}
+  </ion-item>
+</ion-list>
+
+<h2>Prestamos</h2>
+<ion-list>
+  <ion-item *ngFor="let prestamo of prestamos">
+    {{ prestamo.nombreCliente }} - {{ prestamo.fecha | date:'short' }} - {{ prestamo.tipoPrestado }} - {{ prestamo.devuelto}}
+  </ion-item>
+</ion-list>
+
+
+<ion-list>
+  <ion-item *ngFor="let cliente of clientes">
+    {{ cliente.nombre }} - {{ cliente.rut }}
+  </ion-item>
+</ion-list>
+
+
+<form [formGroup]="clienteForm" (ngSubmit)="onSubmit()">
+  <ion-item>
+    <ion-label position="floating">Nombre</ion-label>
+    <ion-input formControlName="nombre"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Rut</ion-label>
+    <ion-input formControlName="rut"></ion-input>
+    <ion-button (click)="buscarCliente()" shape="round">
+      Buscar Cliente
+    </ion-button>
+  </ion-item>
+  <ion-button type="submit">Agregar Cliente</ion-button>
+</form>

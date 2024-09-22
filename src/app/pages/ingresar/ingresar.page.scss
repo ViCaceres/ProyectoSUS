@@ -1,0 +1,25 @@
+ion-item{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    --ion-item-background: rgb(44, 43, 43);
+    
+}
+ion-button{
+    --background: #ffffff;
+    font-weight: bold;
+}
+#submit{
+    display:block;
+    margin:0 auto;
+    margin-top: 10px;
+    width: 60%;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    padding: 16px; /* Ajusta el padding según tus necesidades */
+}
