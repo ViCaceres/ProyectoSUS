@@ -8,16 +8,13 @@ import { HomePageRoutingModule } from './home-routing.module';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { FirestoreModuloModule } from '../modules/firestore-modulo/firestore-modulo.module';
-
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     HomePageRoutingModule,
-    ReactiveFormsModule,
-    FirestoreModuloModule
+    ReactiveFormsModule
   ],
   declarations: [HomePage]
 })

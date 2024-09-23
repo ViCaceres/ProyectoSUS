@@ -7,5 +7,56 @@
 <ion-content [fullscreen]="true">
 
   
+  <form [formGroup]="clienteForm" (ngSubmit)="onSubmit()" class="form-container">
+    <ion-item>
+      <ion-input labelPlacement="floating" formControlName="rut">
+        <div slot="label">Rut <ion-text color="danger">*</ion-text></div>
+      </ion-input>
+      <ion-button expand="full" (click)="buscarCliente()" id="buscarCliente">Buscar Cliente</ion-button>
+    </ion-item>
+
+    <ion-item>
+      <ion-input labelPlacement="floating" formControlName="nombre">
+        <div slot="label">Nombre <ion-text color="danger">*</ion-text></div>
+      </ion-input>
+    </ion-item>
+  
+    <ion-item>
+      <ion-input labelPlacement="floating" formControlName="correo">
+        <div slot="label">Correo <ion-text color="danger">*</ion-text></div>
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-input labelPlacement="floating" formControlName="telefono">
+        <div slot="label">Teléfono <ion-text color="danger">*</ion-text></div>
+      </ion-input>
+    </ion-item>
+
+    <ion-checkbox style="margin-top: 50px;">Estoy de acuerdo con los <a href="#" (click)="terminosCondiciones()">términos y <br>condiciones</a></ion-checkbox>
+
+    <ion-item style="margin-bottom: 50px;">
+      <ion-input labelPlacement="floating" formControlName="numeroRodado">
+        <div slot="label">Número de Rodado <ion-text color="danger">*</ion-text></div>
+      </ion-input>
+    </ion-item>
+
+    <ion-item >
+      <ion-segment (ionChange)="onSegmentChange($event)">
+        <ion-segment-button value="Silla de Ruedas">
+          <img src="../../../assets/sillaRuedas.png" alt="Silla de Ruedas" class="option-image">
+          <ion-label>Silla de Ruedas</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="Coche">
+          <img src="../../../assets/coche.png" alt="Coche" class="option-image">
+          <ion-label>Coche</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item>
+    
+
+
+    <ion-button type="submit" id="submit">Guardar Cliente</ion-button>
+  </form>
 
 </ion-content>

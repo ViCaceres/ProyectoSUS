@@ -1,0 +1,27 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button default-href="#"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-select label="Escoja un cliente" label-placement="floating" fill="solid" (ionChange)="onClienteChange($event)">
+    <ion-select-option *ngFor="let cliente of prestamos_actuales" [value]="cliente.rutCliente">
+      Rodado: {{ cliente.numeroRodado }} | Cliente: {{ cliente.nombreCliente }}
+      
+    </ion-select-option>
+
+  </ion-select>
+
+  <div class="cliente-info" *ngIf="numeroCliente">
+    <p><strong>Teléfono:</strong> <a [href]="'tel:' + numeroCliente" class="phone-link">
+      {{ numeroCliente }}
+    </a>
+    </p>
+  </div>
+
+
+</ion-content>
