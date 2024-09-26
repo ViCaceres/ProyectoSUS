@@ -8,15 +8,5 @@
 
 <ion-content [fullscreen]="true">
 
-  <ion-select label="Escoja un cliente" label-placement="floating" fill="solid" (ionChange)="onClienteChange($event)">
-    <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.rut">{{cliente.nombre}} | {{cliente.rut}}</ion-select-option>
-  </ion-select>
-
-  <div>
-    <ion-label>Firma aquí:</ion-label>
-    <canvas #signatureCanvas width="500" height="300" style="border:1px solid #000;background-color:white;"></canvas>
-    <ion-button (click)="clearCanvas()">Limpiar</ion-button>
-    <ion-button (click)="saveSignature()">Guardar Firma</ion-button>
-  </div>
 
 </ion-content>

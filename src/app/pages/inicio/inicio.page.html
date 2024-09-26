@@ -2,8 +2,10 @@
   
 </ion-header>
 
-<ion-content [fullscreen]="true" class="homepage">
-  
+<ion-content class="homepage">
+  <div class="logoInicial">
+    <img src="../../../assets/logoInicial.png" alt="">
+  </div>
   <ion-list >
     <ion-grid>
 
@@ -25,7 +27,7 @@
 
       <ion-row>
         <ion-col>
-          <ion-button shape="round">
+          <ion-button shape="round" routerLink="/stock">
             Stock
           </ion-button>
         </ion-col>
@@ -34,5 +36,7 @@
     </ion-grid>
   </ion-list>
 
+
+  <img src="../../../assets/logo.png" alt="">
 
 </ion-content>

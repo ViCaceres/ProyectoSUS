@@ -16,7 +16,6 @@ export class FirestoreDataComponent  implements OnInit {
   constructor(private firestoreService: FirestoreService, private fb:FormBuilder) { }
 
   ngOnInit() {
-    this.createForm();
     this.loadClientes();
     this.loadPrestamos();
   }
@@ -36,29 +35,7 @@ export class FirestoreDataComponent  implements OnInit {
     });
   }
 
-  addCliente(){
-    const nuevoCliente = {nombre:'Felipe', rut:'20690939-0'};
-    this.firestoreService.addCliente(nuevoCliente);
-    
-  }
 
-
-  createForm(){
-    this.clienteForm = this.fb.group({
-      nombre: ['', Validators.required],
-      rut: ['', Validators.required]
-    });
-  }
-  onSubmit(){
-    if(this.clienteForm.valid){
-      const cliente = this.clienteForm.value;
-      this.firestoreService.addCliente(cliente)
-      .then(() => {
-        this.clienteForm.reset();
-        this.loadClientes();
-      });
-      }
-    }
 
     buscarCliente() {
       const rut = this.clienteForm.get('rut')?.value;

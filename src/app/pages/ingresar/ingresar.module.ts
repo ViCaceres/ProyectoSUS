@@ -12,6 +12,8 @@ import { FirestoreModuloModule } from 'src/app/modules/firestore-modulo/firestor
 
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { RutFormateoDirective } from 'src/app/directives/rut-formateo.directive';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -19,8 +21,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     IonicModule,
     IngresarPageRoutingModule,
     FirestoreModuloModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RutFormateoDirective
   ],
-  declarations: [IngresarPage]
+  declarations: [IngresarPage, ]
 })
 export class IngresarPageModule {}
