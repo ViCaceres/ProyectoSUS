@@ -75,6 +75,4 @@ addCliente(cliente: { nombre: string, rut: string,correo:string,telefono:string}
     });
   }
   
-
-  
 }
