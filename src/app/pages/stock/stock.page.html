@@ -1,27 +1,36 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button default-href="#"></ion-back-button>
+      <ion-back-button default-href="#" text="Volver"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
 
-  <ion-select label="Escoja un cliente" label-placement="floating" fill="solid" (ionChange)="onClienteChange($event)">
-    <ion-select-option *ngFor="let cliente of prestamos_actuales" [value]="cliente.rutCliente">
-      Rodado: {{ cliente.numeroRodado }} | Cliente: {{ cliente.nombreCliente }}
-      
+  <!-- Select para elegir un cliente con préstamo -->
+  <ion-select label="Escoja un cliente" label-placement="floating" fill="solid" (ionChange)="onClienteChange($event)" style="text-align: center; justify-content: center;">
+    <ion-select-option *ngFor="let cliente of prestamos_actuales" [value]="cliente.rutCliente"> <!-- Se hace un select-option por cada cliente con préstamo, al elegirlo el valor predefinido para manejar es su rut -->
+      <!-- No se puede dar estilo a este texto, ya intentado. -->
+      Rodado: {{ cliente.numeroRodado }} | Cliente: {{ cliente.nombreCliente }} <!-- Se muestra el número de rodado y el nombre del cliente -->
     </ion-select-option>
 
   </ion-select>
 
-  <div class="cliente-info" *ngIf="numeroCliente">
+  <!-- Información del cliente seleccionado -->
+  <div class="cliente-info" *ngIf="numeroCliente" style="margin-top: 30px;text-align: center; justify-content: center;">
+    <!-- Se muestra la fecha del préstamo -->
+    <strong>Fecha Préstamo:</strong> {{ fechaPrestamo  }}
+
+    <!-- Se muestra el número telefónico del cliente -->
     <p><strong>Teléfono:</strong> <a [href]="'tel:' + numeroCliente" class="phone-link">
       {{ numeroCliente }}
     </a>
     </p>
+
   </div>
 
+  <!-- Logo de la vista -->
+  <img src="../../../assets/logo.png" alt="">
 
 </ion-content>

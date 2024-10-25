@@ -1,22 +1,26 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button default-href="#"></ion-back-button>
+      <ion-back-button default-href="#" text="Volver"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
 
-  <ion-select label="Escoja un cliente" label-placement="floating" fill="solid" (ionChange)="onClienteChange($event)">
-    <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.rut">{{cliente.nombre}} | {{cliente.rut}}</ion-select-option>
+  <!-- Select para escoger el cliente a devolución de préstamo -->
+  <ion-select label="Escoja un cliente" label-placement="floating" fill="solid" (ionChange)="onClienteChange($event)" style="text-align: center; justify-content: center;">
+    <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.idCliente">Cliente: {{cliente.nombreCliente}} | Rut: {{cliente.rutCliente}}</ion-select-option>
   </ion-select>
 
-  <div>
-    <ion-label>Firma aquí:</ion-label>
-    <canvas #signatureCanvas width="500" height="300" style="border:1px solid #000;background-color:white;"></canvas>
+  <!-- Espacio para que se dibuje la firma digital -->
+  <div style="text-align: center; justify-content: center;margin-top: 30px;">
+    <strong><ion-label>Firma aquí:</ion-label></strong>
+    <canvas #signatureCanvas width="500" height="500" style="border:1px solid #000;background-color:white;"></canvas>
     <ion-button (click)="clearCanvas()">Limpiar</ion-button>
-    <ion-button (click)="saveSignature()">Guardar Firma</ion-button>
+    <ion-button (click)="saveSignature()">Confirmar</ion-button>
   </div>
 
+  <!-- Logo mall -->
+  <img src="../../../assets/logo.png" alt="">
 </ion-content>

@@ -10,9 +10,10 @@ export class RutFormateoDirective {
 
   constructor(private el: ElementRef, private renderer: Renderer2) { }
 
+  // Escuchar el evento input para formatear el RUT
   @HostListener('input', ['$event'])
   onInput(event: any) {
-    if (this.updatingValue) return; // Ignore programmatic updates
+    if (this.updatingValue) return; // 
 
     const inputElement = this.el.nativeElement;
     let value = inputElement.value;
@@ -31,10 +32,13 @@ export class RutFormateoDirective {
     }
   }
 
+  // Escuchar el evento blur para formatear el RUT
   @HostListener('blur', ['$event'])
   onBlur(event: any) {
     const inputElement = this.el.nativeElement;
+    //
     this.rawValue = inputElement.value.replace(/[^0-9kK]/g, '');
+    // Aplicar formato solo para mostrar
     const formattedValue = this.formatRut(this.rawValue);
     this.updatingValue = true;
     this.renderer.setProperty(inputElement, 'value', formattedValue);
@@ -49,7 +53,7 @@ export class RutFormateoDirective {
 
     let formattedValue = '';
     let counter = 0;
-
+    
     for (let i = rutPart.length - 1; i >= 0; i--) {
       if (counter === 3) {
         formattedValue = '.' + formattedValue;

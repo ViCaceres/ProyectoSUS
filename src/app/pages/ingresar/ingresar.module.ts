@@ -14,6 +14,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { RutFormateoDirective } from 'src/app/directives/rut-formateo.directive';
 
+
+
 @NgModule({
   imports: [
     CommonModule,
@@ -22,8 +24,8 @@ import { RutFormateoDirective } from 'src/app/directives/rut-formateo.directive'
     IngresarPageRoutingModule,
     FirestoreModuloModule,
     ReactiveFormsModule,
-    RutFormateoDirective
+    RutFormateoDirective,
   ],
-  declarations: [IngresarPage, ]
+  declarations: [IngresarPage]
 })
 export class IngresarPageModule {}

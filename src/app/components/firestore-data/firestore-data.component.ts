@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./firestore-data.component.scss'],
 })
 export class FirestoreDataComponent  implements OnInit {
+  //Inicializaciones de variables y formularios
   clientes: any[] = [];
   prestamos: any[] = [];
   clienteForm: FormGroup = new FormGroup({});
@@ -39,8 +40,10 @@ export class FirestoreDataComponent  implements OnInit {
 
     buscarCliente() {
       const rut = this.clienteForm.get('rut')?.value;
+      //Si hay un rut en el formulario, se busca el cliente
       if (rut) {
         this.firestoreService.buscarCliente(rut).subscribe((cliente: any) => {
+          //Si se encuentra el cliente, se actualizan los campos del formulario
           if (cliente) {
             this.clienteForm.patchValue({
               nombre: cliente.nombre,

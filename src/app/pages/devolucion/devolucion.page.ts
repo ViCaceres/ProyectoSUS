@@ -29,6 +29,8 @@ export class DevolucionPage implements OnInit {
   ngOnInit() {
     this.getClientes();
   }
+
+  // Inicialización del canvas
   ngAfterViewInit() {
     this.ctx = this.signatureCanvas.nativeElement.getContext('2d')!;
     this.ctx.strokeStyle = '#000'; // Color del trazo
@@ -48,17 +50,18 @@ export class DevolucionPage implements OnInit {
   }
 
   getClientes(){
-    this.firestoreService.getClientes().subscribe((clientes: any) => {
+    this.firestoreService.getPrestamos().subscribe((clientes: any) => {
       this.clientes = clientes;
       console.log(this.clientes);
     });
   }
 
+  // Función al seleccionar un cliente
   onClienteChange(event: any) {
     this.clienteSeleccionado = event.detail.value;
-    console.log('Cliente seleccionado:', this.clienteSeleccionado);
   }
 
+  // Función para mostrar un mensaje emergente
   async presentToast(message: string, color: string) {
     const toast = await this.toastController.create({
       message: message,
@@ -69,7 +72,7 @@ export class DevolucionPage implements OnInit {
     toast.present();
   }
 
-
+  // Función para iniciar el dibujo
   startDrawing(event: MouseEvent | TouchEvent) {
     this.drawing = true;
     const rect = this.signatureCanvas.nativeElement.getBoundingClientRect();
@@ -79,6 +82,7 @@ export class DevolucionPage implements OnInit {
     this.ctx.moveTo(x - rect.left, y - rect.top);
   }
 
+  // Función al dibujar
   draw(event: MouseEvent | TouchEvent) {
     if (!this.drawing) return;
   const rect = this.signatureCanvas.nativeElement.getBoundingClientRect();
@@ -88,23 +92,25 @@ export class DevolucionPage implements OnInit {
   this.ctx.stroke();
   }
 
+  // Función al dejar de dibujar
   stopDrawing() {
     this.drawing = false;
     this.ctx.closePath();
   }
 
+  // Función para limpiar el canvas
   clearCanvas() {
     this.ctx.clearRect(0, 0, this.signatureCanvas.nativeElement.width, this.signatureCanvas.nativeElement.height);
   }
 
+  // Función para guardar la firma y eliminar el cliente seleccionado
   saveSignature() {
-    const signatureDataURL = this.signatureCanvas.nativeElement.toDataURL();
-    console.log('Firma guardada:', signatureDataURL);
     this.firestoreService.deleteClientePrestamo(this.clienteSeleccionado);
     this.presentToast('Devolución realizada con éxito', 'success');
     this.router.navigate(['/inicio']);
     // Limpiar canvas
     this.clearCanvas();
+    this.getClientes();
   }
   
 
