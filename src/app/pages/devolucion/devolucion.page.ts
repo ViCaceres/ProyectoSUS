@@ -52,7 +52,6 @@ export class DevolucionPage implements OnInit {
   getClientes(){
     this.firestoreService.getPrestamos().subscribe((clientes: any) => {
       this.clientes = clientes;
-      console.log(this.clientes);
     });
   }
 
@@ -105,13 +104,20 @@ export class DevolucionPage implements OnInit {
 
   // Función para guardar la firma y eliminar el cliente seleccionado
   saveSignature() {
-    this.firestoreService.deleteClientePrestamo(this.clienteSeleccionado);
-    this.presentToast('Devolución realizada con éxito', 'success');
-    this.router.navigate(['/inicio']);
-    // Limpiar canvas
-    this.clearCanvas();
-    this.getClientes();
+    if (this.clienteSeleccionado === '') {
+      this.presentToast('Selecciona un cliente', 'danger');
+      return;
+    }
+    else{
+      this.firestoreService.deleteClientePrestamo(this.clienteSeleccionado);
+      this.presentToast('Devolución realizada con éxito', 'success');
+      this.router.navigate(['/inicio']);
+      // Limpiar canvas
+      this.clearCanvas();
+      this.getClientes();
   }
+    }
+    
   
 
 }

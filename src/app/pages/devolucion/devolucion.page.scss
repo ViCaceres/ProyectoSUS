@@ -1,4 +1,21 @@
-img{
+ion-button {
+    margin-top: 20px;
+    font-size: 30px;
+    color:white ;
+    --background: #df001f;
+}
+
+img {
     position: absolute;
     bottom: 0;
+}
+
+ion-content {
+    --background: white;
+}
+
+.imagen-container {
+    display: grid;
+    place-items: center;
+    height: 300px;
 }

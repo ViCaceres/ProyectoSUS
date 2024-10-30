@@ -1,64 +1,58 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
+<ion-header>
+  <ion-toolbar style="--background: #df001f;">
     <ion-buttons slot="start">
-      <ion-back-button default-href="#" text="Volver"></ion-back-button>
+      <ion-back-button default-href="#" text="Volver" style="color: black;"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
 <ion-content [fullscreen]="true">
-
+  
   <!-- Formulario para ingresar cliente -->
   <form [formGroup]="clienteForm" (ngSubmit)="onSubmit()" class="form-container"> <!-- El formulario se hace a partir del formGroup en .ts y hace la función onSubmit() -->
     <!-- Item Formulario -->
-    <ion-item>
+    <ion-item class="bordes">
       <ion-input labelPlacement="floating" formControlName="rut" appRutFormateo maxLength="12" minLength="12"> <!-- Input de RUT, se formatea automáticamente con punto y guión mientras se escribe. -->
-        <div slot="label">Rut <ion-text color="danger">*</ion-text></div> <!-- Campo Obligatorio -->
+        <div slot="label" style="color:black">Rut <ion-text color="danger">*</ion-text></div> <!-- Campo Obligatorio -->
       </ion-input>
-      <ion-button expand="full" (click)="buscarCliente()" id="buscarCliente">Buscar Cliente</ion-button> <!-- Botón para hacer la funcion buscarCliente -->
+      <ion-button (click)="buscarCliente()" id="buscarCliente">Buscar Cliente</ion-button> <!-- Botón para hacer la funcion buscarCliente -->
     </ion-item>
 
     <!-- Item Formulario -->
-    <ion-item>
+    <ion-item class="bordes">
       <ion-input labelPlacement="floating" formControlName="nombre" minLength="3">
-        <div slot="label">Nombre <ion-text color="danger">*</ion-text></div>  <!-- Campo Obligatorio -->
+        <div slot="label" style="color:black" >Nombre <ion-text color="danger">*</ion-text></div>  <!-- Campo Obligatorio -->
       </ion-input>
     </ion-item>
   
     <!-- Item Formulario -->
-    <ion-item >
+    <ion-item class="bordes">
       <ion-input labelPlacement="floating" formControlName="correo" >
-        <div slot="label">Correo <ion-text color="danger">*</ion-text></div> <!-- Campo Obligatorio -->
+        <div slot="label" style="color:black">Correo <ion-text color="danger">*</ion-text></div> <!-- Campo Obligatorio -->
       </ion-input>
     </ion-item>
 
     <!-- Item Formulario -->
-    <ion-item>
-      <ion-input labelPlacement="floating" formControlName="telefono" maxLength="12">
-        <div slot="label">Teléfono <ion-text color="danger">*</ion-text></div> <!-- Campo Obligatorio -->
+    <ion-item class="bordes">
+      <ion-input labelPlacement="floating" formControlName="telefono" maxLength="12" style="color: black;">
+        <div slot="label" style="color:black">Teléfono <ion-text color="danger">*</ion-text></div> <!-- Campo Obligatorio -->
       </ion-input>
     </ion-item>
-
+    
     <!-- Item Formulario -->
-    <ion-checkbox style="margin-top: 50px;">Estoy de acuerdo con los <a href="#" (click)="terminosCondiciones()">términos y <br>condiciones</a></ion-checkbox> <!-- Checkbox para aceptar términos y condiciones -->
-
-    <!-- Item Formulario -->
-    <ion-item style="margin-bottom: 50px;">
+    <ion-item class="bordes" style="margin-bottom: 50px;">
       <ion-input labelPlacement="floating" formControlName="numeroRodado">
-        <div slot="label">Número de Rodado <ion-text color="danger">*</ion-text></div> <!-- Campo Obligatorio -->
+        <div slot="label" style="color:black">Número de Rodado <ion-text color="danger">*</ion-text></div> <!-- Campo Obligatorio -->
       </ion-input>
     </ion-item>
 
     <!-- Item Formulario Selección Rodado-->
-    <ion-item >
+    <ion-item class="bordes">
       <ion-segment (ionChange)="onSegmentChange($event)"> <!-- Segment para seleccionar el tipo de rodado -->
-        <ion-segment-button value="Silla de Ruedas"> <!-- Opción Silla de Ruedas -->
+        <ion-segment-button style="color:black" value="Silla de Ruedas"> <!-- Opción Silla de Ruedas -->
           <img src="../../../assets/sillaRuedas.png" alt="Silla de Ruedas" class="option-image">
-          <ion-label>Silla de Ruedas</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="Coche"> <!-- Opción Coche -->
-          <img src="../../../assets/coche.png" alt="Coche" class="option-image">
-          <ion-label>Coche</ion-label>
+        <ion-segment-button style="color:black"  value="Coche"> <!-- Opción Coche -->
+          <img style="width: 85%;" src="../../../assets/coche.png" alt="Coche" class="option-image">
         </ion-segment-button>
       </ion-segment>
     </ion-item>

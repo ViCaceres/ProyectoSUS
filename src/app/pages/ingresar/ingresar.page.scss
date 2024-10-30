@@ -2,14 +2,20 @@ ion-item{
     margin-top: 10px;
     margin-bottom: 10px;
     border-radius: 10px;
-    --ion-item-background: rgb(44, 43, 43);
-    
+    --ion-item-background: rgb(44, 43, 43);  
 }
+
 ion-button{
-    --background: #ffffff;
+    --background: #df001f;
     font-weight: bold;
-    color:black;
+    color:rgb(255, 255, 255);
+    font-size: 30px;
 }
+
+ion-input{
+    --background:#fafafa ;
+}
+
 #submit{
     display:block;
     margin:0 auto;
@@ -25,3 +31,13 @@ ion-button{
     padding: 16px; /* Ajusta el padding según tus necesidades */
 }
 
+ion-content {
+    --background: #fafffb;
+}
+
+ion-item {
+    --ion-item-background: #fafffb;
+}
+.bordes {
+    font-size: 30px; 
+}

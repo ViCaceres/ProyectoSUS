@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar style="--background: #df001f">
     <ion-buttons slot="start">
-      <ion-back-button default-href="#" text="Volver"></ion-back-button>
+      <ion-back-button default-href="#" text="Volver" style="color: black;"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -9,18 +9,32 @@
 <ion-content [fullscreen]="true">
 
   <!-- Select para escoger el cliente a devolución de préstamo -->
-  <ion-select label="Escoja un cliente" label-placement="floating" fill="solid" (ionChange)="onClienteChange($event)" style="text-align: center; justify-content: center;">
+  <ion-select label="Escoja un cliente" label-placement="floating" fill="solid" (ionChange)="onClienteChange($event)" style="--background:#df001f ; text-align: center; --padding-start: 0;">
     <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.idCliente">Cliente: {{cliente.nombreCliente}} | Rut: {{cliente.rutCliente}}</ion-select-option>
   </ion-select>
 
   <!-- Espacio para que se dibuje la firma digital -->
-  <div style="text-align: center; justify-content: center;margin-top: 30px;">
+  <div style="justify-content: center">
     <strong><ion-label>Firma aquí:</ion-label></strong>
-    <canvas #signatureCanvas width="500" height="500" style="border:1px solid #000;background-color:white;"></canvas>
-    <ion-button (click)="clearCanvas()">Limpiar</ion-button>
-    <ion-button (click)="saveSignature()">Confirmar</ion-button>
+    <canvas #signatureCanvas width="630" height="750" style="border:1px solid #000; margin-top: 30px;background-color:white;"></canvas>
   </div>
 
+  <!-- Botones debajo del contenedor -->
+  <ion-grid>
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="6" class="ion-text-center">
+        <ion-button expand="block" (click)="clearCanvas()">Limpiar</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="6" class="ion-text-center">
+        <ion-button expand="block" (click)="saveSignature()">Confirmar</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
   <!-- Logo mall -->
-  <img src="../../../assets/logo.png" alt="">
+  <div class="imagen-container">
+    <img src="../../../assets/logo.png" alt="">
+  </div>
 </ion-content>
