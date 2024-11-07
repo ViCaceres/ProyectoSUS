@@ -2,3 +2,83 @@ img{
     position: absolute;
     bottom: 0;
 }
+
+h2{
+    text-align: center;
+    justify-content: center;
+    color: black;
+}
+
+.contador p,.contador ion-card{
+    font-size: 20px;
+    color: black;
+    background-color: #fafafa;
+
+}
+.prestamos ion-card{
+    background-color: #fafafa;
+    border: 1px solid #000;
+}
+
+ion-content{
+    --background: white;
+}
+
+ion-searchbar{
+    --background: #fafafa;
+    color: black;
+}
+
+ion-card-title{
+    color: black;
+    text-align: center;
+}
+#fecha{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#fecha ion-card{
+    background-color: #fafafa;
+}
+#fecha ion-card ion-card-title{
+    border:none
+}
+
+
+
+#datosNumericos{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    text-align: center;
+}
+#datosNumericos ion-card{
+    background-color: #fafafa;
+}
+
+
+
+.header-notification {
+    position: absolute; /* Permite la posición relativa al contenedor */
+    top: 0px; /* Ajusta según sea necesario */
+    right: 10px; /* Ajusta según sea necesario */
+    z-index: 1000; /* Asegúrate de que esté encima de otros elementos */
+}
+
+.datetimeBtn{
+        --background: #12974e !important; /* Cambia este color por el que desees */
+        --color: white; /* Cambia el color del texto */
+        --border-color: #ffcc00; /* Cambia el color del borde si es necesario */
+
+}
+
+.modalkpi{
+    --width : 90%;
+    --heigh: 90%
+}
+
+canvas{
+    margin-top: 10%;
+}

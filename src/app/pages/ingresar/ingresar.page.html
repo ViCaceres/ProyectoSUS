@@ -3,6 +3,8 @@
     <ion-buttons slot="start">
       <ion-back-button default-href="#" text="Volver" style="color: black;"></ion-back-button>
     </ion-buttons>
+
+    <ion-title style="color: white;">Ingresar Cliente</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true">
@@ -11,11 +13,13 @@
   <form [formGroup]="clienteForm" (ngSubmit)="onSubmit()" class="form-container"> <!-- El formulario se hace a partir del formGroup en .ts y hace la función onSubmit() -->
     <!-- Item Formulario -->
     <ion-item class="bordes">
-      <ion-input labelPlacement="floating" formControlName="rut" appRutFormateo maxLength="12" minLength="12"> <!-- Input de RUT, se formatea automáticamente con punto y guión mientras se escribe. -->
+      <ion-input labelPlacement="floating" formControlName="rut" appRutFormateo [attr.maxlength]="isChecked ? null : 12" [isChecked]="isChecked" > <!-- Input de RUT, se formatea automáticamente con punto y guión mientras se escribe. -->
         <div slot="label" style="color:black">Rut <ion-text color="danger">*</ion-text></div> <!-- Campo Obligatorio -->
       </ion-input>
       <ion-button (click)="buscarCliente()" id="buscarCliente">Buscar Cliente</ion-button> <!-- Botón para hacer la funcion buscarCliente -->
     </ion-item>
+
+      <ion-checkbox style="color:black" labelPlacement="start" justify="start" formControlName="isChecked" (ionChange)="checkboxChange()">Extranjero (Opcional)</ion-checkbox>
 
     <!-- Item Formulario -->
     <ion-item class="bordes">
@@ -58,7 +62,7 @@
     </ion-item>
     
     <!-- Item Formulario -->
-    <ion-button type="submit" id="submit">Guardar Cliente</ion-button> <!-- Botón para enviar el formulario -->
+    <ion-button type="submit" id="submit">Solicitar Préstamo</ion-button> <!-- Botón para enviar el formulario -->
   </form> 
   <!-- Fin del formulario -->
 

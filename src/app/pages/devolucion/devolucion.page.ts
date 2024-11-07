@@ -22,7 +22,7 @@ export class DevolucionPage implements OnInit {
   
   clientes: any[] = [];
   clienteSeleccionado: string = '';
-
+  historial : any[] = [];
 
   constructor(private firestoreModule: FirestoreModuloModule, private firestoreService:FirestoreService, private alertController: AlertController, private toastController:ToastController, private router:Router) { }
 
@@ -52,12 +52,22 @@ export class DevolucionPage implements OnInit {
   getClientes(){
     this.firestoreService.getPrestamos().subscribe((clientes: any) => {
       this.clientes = clientes;
+      this.ordenarPrestamos();
     });
+
+    this.firestoreService.getHistorial().subscribe((historial: any) => {
+      this.historial = historial;
+    });
+  }
+  
+  ordenarPrestamos(){
+    this.clientes.sort((a, b) => a.numeroRodado - b.numeroRodado);
   }
 
   // Función al seleccionar un cliente
   onClienteChange(event: any) {
     this.clienteSeleccionado = event.detail.value;
+
   }
 
   // Función para mostrar un mensaje emergente
@@ -110,6 +120,15 @@ export class DevolucionPage implements OnInit {
     }
     else{
       this.firestoreService.deleteClientePrestamo(this.clienteSeleccionado);
+      for(let i = 0; i < this.historial.length; i++){
+        if(this.historial[i].idCliente === this.clienteSeleccionado){
+          this.firestoreService.updateHistorial(this.historial[i].docId, {devuelto: true}).then(()=>{
+            console.log('Historial actualizado con éxito');
+          }).catch((error) => {
+            console.error('Error al actualizar el historial: ', error);
+          });
+        }
+      }
       this.presentToast('Devolución realizada con éxito', 'success');
       this.router.navigate(['/inicio']);
       // Limpiar canvas

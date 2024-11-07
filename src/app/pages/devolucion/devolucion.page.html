@@ -1,8 +1,12 @@
-<ion-header [translucent]="true">
+<ion-header >
   <ion-toolbar style="--background: #df001f">
     <ion-buttons slot="start">
       <ion-back-button default-href="#" text="Volver" style="color: black;"></ion-back-button>
     </ion-buttons>
+
+    <ion-title>Devolución</ion-title>
+    <img src="../../../assets/Arauco_solo_logo.png" alt="" style="height: 100%; width: auto; right:5%; align-items: center; justify-content: center;">
+
   </ion-toolbar>
 </ion-header>
 
@@ -10,7 +14,7 @@
 
   <!-- Select para escoger el cliente a devolución de préstamo -->
   <ion-select label="Escoja un cliente" label-placement="floating" fill="solid" (ionChange)="onClienteChange($event)" style="--background:#df001f ; text-align: center; --padding-start: 0;">
-    <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.idCliente">Cliente: {{cliente.nombreCliente}} | Rut: {{cliente.rutCliente}}</ion-select-option>
+    <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.idCliente"> {{cliente.numeroRodado}} - {{cliente.nombreCliente}}</ion-select-option>
   </ion-select>
 
   <!-- Espacio para que se dibuje la firma digital -->
@@ -32,9 +36,9 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+  <div class="imagen-container" style="justify-content: center;">
+    <img src="../../../assets/logo.png" alt="logo">
+      </div>
 
-  <!-- Logo mall -->
-  <div class="imagen-container">
-    <img src="../../../assets/logo.png" alt="">
-  </div>
+
 </ion-content>

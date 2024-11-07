@@ -1,10 +1,12 @@
-import { Directive, HostListener, ElementRef, Renderer2 } from '@angular/core';
+import { Directive, HostListener, ElementRef, Renderer2, Input } from '@angular/core';
 
 @Directive({
   selector: '[appRutFormateo]',
   standalone: true
 })
 export class RutFormateoDirective {
+  @Input() isChecked: boolean = false;
+
   private updatingValue = false;
   private rawValue: string = '';
 
@@ -13,23 +15,29 @@ export class RutFormateoDirective {
   // Escuchar el evento input para formatear el RUT
   @HostListener('input', ['$event'])
   onInput(event: any) {
-    if (this.updatingValue) return; // 
 
-    const inputElement = this.el.nativeElement;
-    let value = inputElement.value;
+    if(!this.isChecked){
+      if (this.updatingValue) return; // 
 
-    // Mantén el valor crudo sin formato
-    this.rawValue = value.replace(/[^0-9kK]/g, '');
+      const inputElement = this.el.nativeElement;
+      let value = inputElement.value;
+  
+      // Mantén el valor crudo sin formato
+      this.rawValue = value.replace(/[^0-9kK]/g, '');
+  
+      // Aplicar formato solo para mostrar
+      const formattedValue = this.formatRut(this.rawValue);
+      
+      // Actualizar el valor del input solo si es diferente al valor actual
+      if (formattedValue !== inputElement.value) {
+        this.updatingValue = true;
+        this.renderer.setProperty(inputElement, 'value', formattedValue);
+        this.updatingValue = false;
+      }
 
-    // Aplicar formato solo para mostrar
-    const formattedValue = this.formatRut(this.rawValue);
-
-    // Actualizar el valor del input solo si es diferente al valor actual
-    if (formattedValue !== inputElement.value) {
-      this.updatingValue = true;
-      this.renderer.setProperty(inputElement, 'value', formattedValue);
-      this.updatingValue = false;
     }
+
+    
   }
 
   // Escuchar el evento blur para formatear el RUT

@@ -7,6 +7,7 @@ import { RutFormateoDirective } from 'src/app/directives/rut-formateo.directive'
 import { find } from 'rxjs';
 
 import { ModalController } from '@ionic/angular';
+import * as moment from 'moment';
 
 
 @Component({
@@ -23,6 +24,9 @@ export class IngresarPage implements OnInit {
   prestamos: any[] = [];
   clienteForm: FormGroup;
   selectedOption: string;
+  isChecked: boolean = false; // Variable para el checkbox
+
+
 
   constructor(
     private firestoreService: FirestoreService,
@@ -35,14 +39,15 @@ export class IngresarPage implements OnInit {
     this.selectedOption = 'Silla de Ruedas'; // Valor por defecto
     this.clienteForm = this.fb.group({
       nombre: ['', Validators.required],
-      rut: ['', Validators.required],
+      rut: [''],
       correo: ['', [Validators.required, Validators.email]],
       telefono: [ //Teléfono con formato nacional
-        '+56',
+        '',
         [Validators.required, Validators.pattern('^(\\+?[0-9]{9,12})$')],
       ],
       numeroRodado: ['', Validators.required],
       tipoPrestado: [this.selectedOption, Validators.required], // Define el valor inicial
+      isChecked: [false]
     });
   }
 
@@ -61,6 +66,8 @@ export class IngresarPage implements OnInit {
     this.firestoreService.getPrestamos().subscribe((prestamos) => {
       this.prestamos = prestamos;
     });
+
+    this.checkboxChange();
   }
 
   //Función al cambiar el valor del select
@@ -84,132 +91,186 @@ export class IngresarPage implements OnInit {
   onSubmit() {
     if (this.clienteForm.valid) {
       // Formatear el RUT antes de enviar
-      const rut_raw = this.rutFormateoDirective.getRawValue().toUpperCase();
-      const rut = this.formatRut(rut_raw);
+      let rut : string;
 
-      // Extraer los valores del formulario
-      const { nombre, correo, telefono } = this.clienteForm.value;
-      const tipoPrestado = this.clienteForm.get('tipoPrestado')?.value;
-      const numeroRodado = this.clienteForm.get('numeroRodado')?.value;
-
-      // Crear un objeto cliente para enviarlo
-      const cliente = { nombre, rut, correo, telefono };
-
-      // Buscar si el cliente ya existe
-      const clienteExistente = this.clientes.find((c) => c.rut === rut);
-      
-      // Si el cliente ya existe
-      if (clienteExistente) {
-
-        // Verificar si los datos del cliente han sido modificados
-        const datosModificados = 
-          clienteExistente.nombre !== nombre ||
-          clienteExistente.correo !== correo ||
-          clienteExistente.telefono !== telefono;
-        
-        // Verificar si el cliente tiene un préstamo activo
-        const prestamoActivo = this.prestamos.some(
-          (prestamo) => prestamo.idCliente === clienteExistente.id && !prestamo.devuelto // Si el cliente tiene un préstamo activo
-        );
-
-        // Si tiene un préstamo activo, mostrar error
-        if (prestamoActivo) {
-          this.presentToast('Cliente ya tiene un préstamo activo', 'danger');
-        } else {
-          // Si no tiene un préstamo activo, agregar el préstamo
-          if (datosModificados) {
-            // Si los datos del cliente han sido modificados, mostrar alerta
-            this.alertController.create({
-              header: '¿Desea modificar los datos del cliente?',
-              message: 'Se modificarán los datos del cliente y se creará un nuevo préstamo',
-              buttons: [
-                { // Botón de cancelar
-                  text: 'Cancelar',
-                  role: 'cancel',
-                  cssClass: 'secondary',
-                },
-                { // Botón de aceptar
-                  text: 'Aceptar',
-                  handler: () => {
-                    // Actualizar los datos del cliente y agregar el préstamo
-                    for(let i=0; i<this.clientes.length; i++){ //Recorrer los clientes
-                      if(this.clientes[i].rut == clienteExistente.rut){ //Si el rut del cliente es igual al rut del cliente existente
-                        this.firestoreService.updateCliente(this.clientes[i].id, cliente); //Actualizar el cliente con los nuevos datos
-                      }
-                    }
-                    
-                    // Agregar el préstamo
-                    this.firestoreService
-                    .addPrestamo({
-                      tipoPrestado: tipoPrestado,
-                      fecha: new Date(), // Fecha actual
-                      idCliente: clienteExistente.id, // ID del cliente existente
-                      nombreCliente: cliente.nombre,
-                      rutCliente: cliente.rut,
-                      devuelto: false,
-                      numeroRodado: numeroRodado,
-                    })
-                    .then(() => {
-                      this.presentToast('Préstamo ingresado con éxito', 'success');
-                      this.clienteForm.reset();
-                      this.router.navigate(['/inicio']);
-                    });
-                  },
-                },
-              ],
-            }).then((alert) => {
-              alert.present();
-            });
-            
-  
-          }
-          // Si los datos del cliente no han sido modificados, agregar solamente el préstamo
-          else{
-            this.firestoreService
-            .addPrestamo({
-              tipoPrestado: tipoPrestado,
-              fecha: new Date(),
-              idCliente: clienteExistente.id,
-              nombreCliente: cliente.nombre,
-              rutCliente: cliente.rut,
-              devuelto: false,
-              numeroRodado: numeroRodado,
-            })
-            .then(() => {
-              this.presentToast('Préstamo ingresado con éxito', 'success');
-              this.clienteForm.reset();
-              this.router.navigate(['/inicio']);
-            });
-          }
-          
-        }
-      } else {
-        // Si el cliente no existe, agregar el cliente y el préstamo
-        this.firestoreService
-          .addCliente(cliente, tipoPrestado, numeroRodado)
-          .then((nuevoCliente) => {
-            this.presentToast('Cliente ingresado con éxito', 'success');
-            this.clienteForm.reset();
-            this.router.navigate(['/inicio']);
-          })
-          .catch((error) => {
-            this.presentToast('Error al crear el cliente', 'danger');
-            console.error(error);
-          });
+      if(this.clienteForm.get('isChecked')?.value ){
+        rut = this.clienteForm.get('rut')?.value;
       }
+      else{
+      
+      const rut_raw = this.rutFormateoDirective.getRawValue().toUpperCase();
+      rut = this.formatRut(rut_raw);
+      
+      }
+
+      if(rut){
+        this.manejoSubmit(rut);
+      }else{
+        this.presentToast('Ingrese un rut válido', 'danger');
+      }
+
+
+      
     } else { // Si el formulario no es válido
-      this.presentToast('Complete todos los campos', 'danger');
+      this.showValidationErrors();
+
     }
   }
 
+  manejoSubmit(rut: string) {
+    const { nombre, correo, telefono } = this.clienteForm.value;
+    const tipoPrestado = this.clienteForm.get('tipoPrestado')?.value;
+    const numeroRodado = this.clienteForm.get('numeroRodado')?.value;
+
+    const cliente = { nombre, rut, correo, telefono };
+
+    const clienteExistente = this.clientes.find((c) => c.rut === rut);
+
+    if (clienteExistente) {
+        const datosModificados = 
+            clienteExistente.nombre !== nombre ||
+            clienteExistente.correo !== correo ||
+            clienteExistente.telefono !== telefono;
+
+        const prestamoActivo = this.prestamos.some(
+            (prestamo) => prestamo.idCliente === clienteExistente.id && !prestamo.devuelto
+        );
+
+        if (prestamoActivo) {
+            this.presentToast('Cliente ya tiene un préstamo activo', 'danger');
+        } else {
+            if (datosModificados) {
+                this.alertController.create({
+                    header: '¿Desea modificar los datos del cliente?',
+                    message: 'Se modificarán los datos del cliente y se creará un nuevo préstamo',
+                    buttons: [
+                        {
+                            text: 'Cancelar',
+                            role: 'cancel',
+                            cssClass: 'secondary',
+                        },
+                        {
+                            text: 'Aceptar',
+                            handler: () => {
+                                this.firestoreService.updateCliente(clienteExistente.id, cliente)
+                                    .then(() => {
+                                        this.agregarPrestamo(clienteExistente.id, cliente, tipoPrestado, numeroRodado);
+                                        this.agregarHistorial(clienteExistente.id, cliente, numeroRodado);
+                                        this.agregarContadorHistorico(tipoPrestado);
+                                    })
+                                    .then(() => {
+                                        this.presentToast('Préstamo agregado con éxito', 'success');
+                                        this.clienteForm.reset();
+                                        this.router.navigate(['/inicio']);
+                                    })
+                                    .catch((error) => {
+                                        this.presentToast('Error al agregar préstamo', 'danger');
+                                        console.error(error);
+                                    });
+                            },
+                        },
+                    ],
+                }).then((alert) => {
+                    alert.present();
+                });
+            } else {
+                this.agregarPrestamo(clienteExistente.id, cliente, tipoPrestado, numeroRodado)
+                    .then(() => {
+                        this.presentToast('Préstamo agregado con éxito', 'success');
+                        this.agregarHistorial(clienteExistente.id, cliente, numeroRodado);
+                        this.agregarContadorHistorico(tipoPrestado);
+                        this.clienteForm.reset();
+                        this.router.navigate(['/inicio']);
+                    })
+                    .catch((error) => {
+                        this.presentToast('Error al agregar préstamo', 'danger');
+                        console.error(error);
+                    });
+            }
+        }
+    } else {
+        
+        this.firestoreService.addCliente(cliente, tipoPrestado, numeroRodado)
+            .then((nuevoClienteId) => {
+                this.presentToast('Cliente ingresado con éxito', 'success');
+            })
+            .then(() => {
+                this.clienteForm.reset();
+                this.router.navigate(['/inicio']);
+            })
+            .catch((error) => {
+                this.presentToast('Error al crear el cliente', 'danger');
+                console.error(error);
+            });
+    }
+}
+
+
+agregarPrestamo(idCliente: string, cliente: any, tipoPrestado: string, numeroRodado: string) {
+    return this.firestoreService.addPrestamo({
+        tipoPrestado: tipoPrestado,
+        fecha: new Date(),
+        idCliente: idCliente,
+        nombreCliente: cliente.nombre,
+        rutCliente: cliente.rut,
+        devuelto: false,
+        numeroRodado: numeroRodado,
+    }).then(() => {
+        this.presentToast('Préstamo ingresado con éxito', 'success');
+    });
+}
+
+agregarHistorial(idCliente: string, cliente: any, numeroRodado: string) {
+    this.firestoreService.addHistorial({
+        idCliente: idCliente,
+        nombreCliente: cliente.nombre,
+        rutCliente: cliente.rut,
+        fecha: new Date(),
+        numeroRodado: numeroRodado,
+        devuelto: false
+    }).then(() => {
+        console.log('Historial creado con éxito');
+    }).catch(error => {
+        console.error('Error al crear el historial:', error);
+    });
+}
+
+agregarContadorHistorico(tipoPrestado: string) {
+    let sillas = 0;
+    let coches = 0;
+
+    if (tipoPrestado === 'Silla de Ruedas') {
+        sillas = 1;
+    } else if (tipoPrestado === 'Coche') {
+        coches = 1;
+    }
+
+    return this.firestoreService.addContadorHistorico({
+        fecha: new Date(),
+        sillas: sillas,
+        coches: coches,
+    }).then(() => {
+        console.log('Contador histórico actualizado con éxito');
+    }).catch(error => {
+        console.error('Error al actualizar el contador histórico:', error);
+    });
+}
+
+
   //Función para buscar un cliente
   buscarCliente() {
+    let rut = '';
     // Formatear el RUT antes de buscar
-    const rut_raw = this.rutFormateoDirective.getRawValue().toUpperCase();
-    const rut = this.formatRut(rut_raw);
-
+    if(this.isChecked){
+      rut = this.clienteForm.get('rut')?.value;
+    }
+    else{
+      const rut_raw = this.rutFormateoDirective.getRawValue().toUpperCase();
+      rut = this.formatRut(rut_raw);
+    }
     // Buscar el cliente en la base de datos
     if (rut) {
+
       this.firestoreService.buscarCliente(rut).subscribe((cliente: any) => {
         if (cliente) {
           // Mostrar los datos del cliente en el formulario si se encuentra en la BD
@@ -231,9 +292,47 @@ export class IngresarPage implements OnInit {
     }
   }
 
+  showValidationErrors() {
+    let messages: string[] = [];
+
+    // Iterar sobre los controles del formulario
+    Object.keys(this.clienteForm.controls).forEach(key => {
+        const control = this.clienteForm.get(key);
+        if (control?.invalid) {
+            if (control.errors?.['required']) {
+                messages.push(`El campo ${key} es obligatorio.`);
+            }
+            if (control.errors?.['email']) {
+                messages.push(`Ingrese un correo electrónico válido.`);
+            }
+            if (control.errors?.['pattern']) {
+                messages.push(`El formato de ${key} es incorrecto.`);
+            }
+            if (control.errors?.['minlength']) {
+                messages.push(`El campo ${key} debe tener al menos ${control.errors['minlength'].requiredLength} caracteres.`);
+            }
+            if (control.errors?.['maxlength']) {
+                messages.push(`El campo ${key} no puede exceder ${control.errors['maxlength'].requiredLength} caracteres.`);
+            }
+        }
+    });
+
+    if (messages.length > 0) {
+        this.presentToast(messages.join(' '), 'danger');
+    } else {
+        this.presentToast('Complete todos los campos', 'danger');
+    }
+} 
+
+
   // Función para formatear el RUT
   formatRut(rut: string): string {
-    // Eliminar caracteres no numéricos, excepto la letra K
+    if(this.isChecked){
+      console.log('FORMATEO RUT ', rut);
+      return rut;
+    }else{
+
+          // Eliminar caracteres no numéricos, excepto la letra K
     rut = rut.replace(/[^0-9kK]/g, '');
     // Separar el dígito verificador
     const rutPart = rut.slice(0, -1);
@@ -241,6 +340,25 @@ export class IngresarPage implements OnInit {
     const dvPart = rut.slice(-1);
     // Formatear el RUT con puntos y guión
     return `${rutPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}-${dvPart}`;
+    }
+    
+
+  }
+
+  checkboxChange(){
+    this.isChecked = this.clienteForm.get('isChecked')?.value;
+
+    const rutControl = this.clienteForm.get('rut');
+
+
+    if(this.isChecked == false){
+      rutControl?.setValidators([Validators.maxLength(12), Validators.required]);
+    }
+    else{
+    }
+
+    rutControl?.updateValueAndValidity();
+
   }
 
   // Función para mostrar los términos y condiciones
