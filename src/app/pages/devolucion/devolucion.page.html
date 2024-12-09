@@ -1,44 +1,107 @@
+<!-- **Encabezado al estilo pro**: Aquí comienza nuestra hermosa barra superior :) -->
 <ion-header >
   <ion-toolbar style="--background: #df001f">
+      <!-- Botón de escape: ¡Por si necesitamos huir rápido! -->
     <ion-buttons slot="start">
       <ion-back-button default-href="#" text="Volver" style="color: black;"></ion-back-button>
     </ion-buttons>
-
-    <ion-title>Devolución</ion-title>
-    <img src="../../../assets/Arauco_solo_logo.png" alt="" style="height: 100%; width: auto; right:5%; align-items: center; justify-content: center;">
-
   </ion-toolbar>
 </ion-header>
 
+<!-- **Contenido principal**: Ahora si viene lo chido  -->
 <ion-content [fullscreen]="true">
 
-  <!-- Select para escoger el cliente a devolución de préstamo -->
-  <ion-select label="Escoja un cliente" label-placement="floating" fill="solid" (ionChange)="onClienteChange($event)" style="--background:#df001f ; text-align: center; --padding-start: 0;">
-    <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.idCliente"> {{cliente.numeroRodado}} - {{cliente.nombreCliente}}</ion-select-option>
+  <!-- Selección de clientes: Porque obviamente necesitamos saber quién tiene el rodado para entregar el carnet correctamente -->
+  <ion-select 
+    label="Escoja un cliente" 
+    label-placement="floating" 
+    fill="solid" 
+    (ionChange)="onClienteChange($event)" 
+    style="--background:#df001f ; text-align: center; --padding-start: 0;">
+    <!-- **Iteración de clientes**: Transformamos una lista aburrida en algo útil -->
+    <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.idCliente">
+      <!-- Mostrar la combinación mágica de datos: número del rodado y nombre del cliente -->
+      {{cliente.numeroRodado}} - {{cliente.nombreCliente}}
+    </ion-select-option>
   </ion-select>
 
-  <!-- Espacio para que se dibuje la firma digital -->
-  <div style="justify-content: center">
-    <strong><ion-label>Firma aquí:</ion-label></strong>
-    <canvas #signatureCanvas width="630" height="750" style="border:1px solid #000; margin-top: 30px;background-color:white;"></canvas>
-  </div>
-
-  <!-- Botones debajo del contenedor -->
+  <!-- Zona de botones: Con cuidadito porque aquí no hay espacio para errores -->
   <ion-grid>
-    <ion-row class="ion-justify-content-center">
-      <ion-col size="6" class="ion-text-center">
-        <ion-button expand="block" (click)="clearCanvas()">Limpiar</ion-button>
+    <ion-row class="ion-justify-content-center ion-align-items-center">
+         <!-- Botón de limpieza: Por si dibujaste una obra de arte accidental -->
+      <ion-col size="auto" class="ion-text-center">
+        <ion-button (click)="clearCanvas()" style="margin-right: 20px;">Limpiar</ion-button>
       </ion-col>
-    </ion-row>
-    <ion-row class="ion-justify-content-center">
-      <ion-col size="6" class="ion-text-center">
-        <ion-button expand="block" (click)="saveSignature()">Confirmar</ion-button>
+      <!-- Botón de confirmación: Porque "hecho" es mejor que "perfecto" -->
+      <ion-col size="auto" class="ion-text-center">
+        <ion-button (click)="saveSignature()">Confirmar</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
+  
+  
+  <!-- Espacio de creación artística: Firma digital pero con estilo (aunque no entreguen lapiz para firmar xd) -->
+  <div style="justify-content: center">
+    <!-- Etiqueta motivacional: Porque necesitamos que la gente firme aquí y no en otro lugar (porque solo explicando la gente no entiende :) -->
+    <strong><ion-label>Firma aquí:</ion-label></strong>
+    <canvas 
+      #signatureCanvas 
+      width="630" 
+      height="750" 
+      style="border:1px solid #000; margin-top: 30px;background-color:white;">
+    </canvas>
+  </div>
+
+   <!-- Logo del proyecto: El más precioso porque es nuestro cliente Shhh  -->
   <div class="imagen-container" style="justify-content: center;">
+    <!-- Logotipo de nivel corporativo: Porque queremos que esto grite "¡ SOY PROFESIONAL!" -->
     <img src="../../../assets/logo.png" alt="logo">
       </div>
 
-
 </ion-content>
+
+
+
+
+
+
+
+
+
+<!-- **Código originalmente funcional pero descartado** 
+
+
+<script>
+  // Función de validación que se planeó utilizar en el formulario de clientes
+  // Esta función fue eliminada porque se optó por una solución más eficiente
+  function validarFormulario() {
+    let formValido = true;
+    if (!document.querySelector('input[name="nombreCliente"]').value) {
+      formValido = false;
+      alert("Nombre no válido");
+    }
+    return formValido;
+  }
+
+  // Se decidió que el formulario de validación ya no era necesario, así que esta función ahora está obsoleta
+  // De todas maneras, la dejamos aquí como parte del proceso de desarrollo anterior
+
+  // **Variable de usuario descartada**
+  let usuarioEnProceso = null;
+
+  // Esta variable se usó originalmente para almacenar el cliente en proceso de firma,
+  // pero la implementación actual usa una lógica distinta.
+  // De todas maneras, mantuvimos esta referencia como parte de la evolución del código.
+  setTimeout(() => {
+    if (usuarioEnProceso) {
+      console.log(`Usuario en proceso: ${usuarioEnProceso.nombre}`);
+    } else {
+      console.log("No hay usuario en proceso.");
+    }
+  }, 500);
+
+
+ Fin del código abandonado y comentado 
+
+
+-->

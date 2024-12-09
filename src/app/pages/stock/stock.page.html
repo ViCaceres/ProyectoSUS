@@ -1,91 +1,95 @@
+<!-- Encabezado fijo con herramientas integradas -->
 <ion-header [translucent]="true">
+  <!-- Barra de herramientas personalizada con estilo -->
   <ion-toolbar style="--background: #df001f;">
+
+    <!-- Botón de retroceso: Porque siempre es útil volver -->
     <ion-buttons slot="start">
-      <ion-back-button default-href="#" text="Volver"></ion-back-button>
+      <ion-back-button default-href="#" text="Volver" style="color: rgb(0, 0, 0);"></ion-back-button>
     </ion-buttons>
 
+    <!-- Título centrado: La estrella del encabezado -->
     <ion-title>Stock</ion-title>
 
-    <img src="../../../assets/Arauco_solo_logo.png" alt="" style="height: 100%; width: auto; right:5%; align-items: center; justify-content: center;">
+    <!-- Botón "Open": Llama a la acción en el extremo derecho -->
+    <ion-buttons slot="end">
+      <ion-button id="open-modal" fill="clear" style="--ion-color-base: #000000;" (click)="confirmationModal.present()">Open</ion-button>
+    </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content [fullscreen]="true">
+  <!-- Buscador con filtro: Perfecto para encontrar préstamos 'altoque' -->
+  <div class="buscador">
+    <ion-searchbar [(ngModel)]="searchText" placeholder="Buscar por nombre o número rodado..." (ionInput)="filterPrestamos()"></ion-searchbar>
+    <!-- Modal con un selector de fecha: Para filtrar como un bestia -->
+    <ion-modal [keepContentsMounted]="true" id="modal-calendario">
+      <ng-template>
+        <ion-datetime id="datetime" [(ngModel)]="searchDate" (ionChange)="filterPrestamos()"
+          displayFormat="DD/MM/YYYY" presentation="date"></ion-datetime>
+      </ng-template>
+    </ion-modal>
+  </div>
 
-<div class="buscador">
-  <ion-searchbar [(ngModel)]="searchText" placeholder="Buscar por nombre o número rodado..." (ionInput)="filterPrestamos()"></ion-searchbar>
+  <!-- Contador de rodados prestados porque si, a final de dia se rinde cuentas -->
+  <div class="contador">
+    <ion-card>
+      <ion-card-content style="align-items: center; text-align: center;">
+        <ion-datetime-button datetime="datetime"></ion-datetime-button>
 
+        <!-- Contador de sillas -->
+        <div class="sillas" style="margin-top: 5%;" *ngIf="flagPrestamos == 'actual' || flagPrestamos == 'menor'">
+          <p>Sillas Prestadas: {{contadorSillas}}</p>
+        </div>
+        
+        <!-- Contador de coches -->
+        <div class="coches" *ngIf="flagPrestamos == 'actual' || flagPrestamos == 'menor'">
+          <p>Coches Prestados: {{contadorCoches}}</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
+  <!-- Lista de préstamos con estado -->
+  <div class="prestamos">
+    <h2 *ngIf="flagPrestamos == 'menor'">Préstamos Pasados:</h2>
+    <h2 *ngIf="flagPrestamos == 'mayor'">No Disponible.</h2>
+    <h2 *ngIf="flagPrestamos == 'actual'">Préstamos del Día:</h2>
+    
+    <ion-card *ngFor="let cliente of prestamosFiltro; let i = index">
+      <ion-card-header>
+        <ion-card-subtitle>{{cliente.numeroRodado}}</ion-card-subtitle>
+        <ion-card-title>{{cliente.nombreCliente}}</ion-card-title>
 
-  
-  <ion-modal [keepContentsMounted]="true" id="modal-calendario">
-    <ng-template>
-      <ion-datetime id="datetime" [(ngModel)]="searchDate" (ionChange)="filterPrestamos()"
-      displayFormat="DD/MM/YYYY" presentation="date" ></ion-datetime>
-    </ng-template>
-  </ion-modal>
+        <!-- Alerta de préstamo no devuelto, porque pasa que si se los llevan :( -->
+        <div class="header-notification">
+          <p *ngIf="prestamosFiltro[i].devuelto == false">
+            <ion-icon name="alert-circle" color="danger"></ion-icon>
+            <strong>Préstamo No Devuelto</strong>
+          </p>
+        </div>
 
-</div>
-
-
-<div class="contador">
-  <ion-card>
-    <ion-card-content style="align-items: center;text-align: center;">
-      <ion-datetime-button datetime="datetime" ></ion-datetime-button>
-
-      <div class="sillas" style="margin-top: 5%;" *ngIf="flagPrestamos == 'actual' || flagPrestamos== 'menor' ">
-        <p>Sillas Prestadas: {{contadorSillas}}</p>
-      </div>
-      <div class="coches" *ngIf="flagPrestamos == 'actual' || flagPrestamos== 'menor' ">
-        <p>Coches Prestados: {{contadorCoches}}</p>
-      </div>
-    </ion-card-content>
-  </ion-card>
-  
-</div>
-
-
-<div class="prestamos"  >
-  <h2 *ngIf="flagPrestamos == 'menor' ">Préstamos Pasados:</h2>
-  <h2 *ngIf="flagPrestamos == 'mayor' ">No Disponible.</h2>
-  <h2 *ngIf="flagPrestamos == 'actual' ">Préstamos del Día:</h2>
-  <ion-card *ngFor="let cliente of prestamosFiltro; let i = index">
-    <ion-card-header>
-      <ion-card-subtitle >{{cliente.numeroRodado }} </ion-card-subtitle>
-      <ion-card-title>{{ cliente.nombreCliente }}</ion-card-title>
-
-      <div class="header-notification">
-        <p *ngIf="prestamosFiltro[i].devuelto == false">
-          <ion-icon name="alert-circle" color="danger"></ion-icon>
-          <strong>Préstamo No Devuelto</strong>
+        <!-- Préstamo devuelto, excelente personas bellas, aunque no siempre devuelven a tiempo -->
+        <div class="header-notification">
+          <p *ngIf="prestamosFiltro[i].devuelto == true">
+            <ion-icon name="checkmark-circle" color="success"></ion-icon>
+            <strong>Préstamo Devuelto</strong>
+          </p>
+        </div>
+      </ion-card-header>
+      <ion-card-content>
+        <p><strong>Fono:</strong> 
+          <a [href]="'tel:' + cliente.idCliente" class="phone-link" style="text-decoration: none;">
+            {{telefonos[cliente.idCliente]}}
+          </a>
         </p>
-      </div>
+        <p style="float: right;">{{formatDate(cliente.fecha)}}</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
-      <div class="header-notification">
-        <p *ngIf="prestamosFiltro[i].devuelto == true">
-          <ion-icon name="checkmark-circle" color="success"></ion-icon>
-          <strong>Préstamo Devuelto</strong>
-        </p>
-      </div>
-
-    </ion-card-header>
-    <ion-card-content>
-      <p><strong>Fono:</strong> <a [href]="'tel:' + cliente.idCliente" class="phone-link" style="text-decoration: none;">
-        {{telefonos[cliente.idCliente]}}
-      </a>
-      </p>
-
-      <p style="float: right;">{{formatDate(cliente.fecha)}}</p>
-
-    </ion-card-content>
-  </ion-card>
-</div>
-
-
-
-<ion-button id="open-modal" expand="block" (click)="confirmationModal.present()">Open</ion-button>
-
+  <!-- Modal para KPIs -->
   <ion-modal #modal_kpi (ionModalDidPresent)="ionModalDidPresent()" class="modalkpi">
     <ng-template>
       <ion-header>
@@ -100,81 +104,95 @@
       </ion-header>
       <ion-content class="ion-padding">
         <div #modalContenidoPDF>
-          
+          <!-- Fecha seleccionada -->
           <div id="fecha">
+            <ion-card>
+              <ion-card-title>{{fechaSeleccionada}}</ion-card-title>
+            </ion-card>
+          </div>
 
-          <ion-card>
-            <ion-card-title>{{fechaSeleccionada}}</ion-card-title>
-          </ion-card>
+          <!-- Datos numéricos -->
+          <div id="datosNumericos">
+            <ion-card>
+              <ion-card-title>Total Préstamos</ion-card-title>
+              <ion-card-content>{{totalPrestamos}}</ion-card-content>
+            </ion-card>
 
-        </div>
+            <ion-card>
+              <ion-card-title>Clientes Únicos</ion-card-title>
+              <ion-card-content>{{clienteUnico.size}}</ion-card-content>
+            </ion-card>
 
-        <div id="datosNumericos">
+            <ion-card>
+              <ion-card-title>Hora Peak</ion-card-title>
+              <ion-card-content>{{horaPeak}}</ion-card-content>
+            </ion-card>
 
-          <ion-card>
-            <ion-card-title>Total Préstamos</ion-card-title>
-            <ion-card-content>
-              {{totalPrestamos}}
-            </ion-card-content>
-          </ion-card>
-  
-          <ion-card>
-            <ion-card-title>Clientes Únicos</ion-card-title>
-            <ion-card-content>
-              {{clienteUnico.size}}
-            </ion-card-content>
-          </ion-card>
-  
-          <ion-card>
-            <ion-card-title>Hora Peak</ion-card-title>
-            <ion-card-content>
-              {{horaPeak}}
-            </ion-card-content>
-          </ion-card>
+            <ion-card *ngIf="prestamosUltimoMes != 0">
+              <ion-card-title>Préstamos en el mes</ion-card-title>
+              <ion-card-content>{{prestamosUltimoMes}}</ion-card-content>
+            </ion-card>
 
-          <ion-card *ngIf="prestamosUltimoMes != 0">
-            <ion-card-title>Préstamos en el mes</ion-card-title>
-            <ion-card-content>
-              {{prestamosUltimoMes}}
-            </ion-card-content>
-          </ion-card>
+            <ion-card class="contadorPrestados">
+              <ion-card-title>Sillas Prestadas</ion-card-title>
+              <ion-card-content>{{contadorSillas}}</ion-card-content>
+            </ion-card>
 
-          <ion-card class="contadorPrestados">
-            <ion-card-title>Sillas Prestadas</ion-card-title>
-            <ion-card-content>
-              {{contadorSillas}}
-            </ion-card-content>
-          </ion-card>
-  
-          <ion-card>
-            <ion-card-title>Coches Prestados</ion-card-title>
-            <ion-card-content>
-              {{contadorCoches}}
-            </ion-card-content>
-          </ion-card>
+            <ion-card>
+              <ion-card-title>Coches Prestados</ion-card-title>
+              <ion-card-content>{{contadorCoches}}</ion-card-content>
+            </ion-card>
+          </div>
 
-        </div>
-
-        
-        
-
-
-          <canvas id="myChart" ></canvas>
-
-          <canvas id="fechaYcantidad" ></canvas>
+          <!-- Gráficos de datos, que precioso que quedan cierto? -->
+          <canvas id="myChart"></canvas>
+          <canvas id="fechaYcantidad"></canvas>
         </div>
       </ion-content>
     </ng-template>
   </ion-modal>
 
-
-
-
-
-
-<div class="imagen-container" style="justify-content: center;">
-  <img src="../../../assets/logo.png" alt="logo">
-    </div>
-
-
+  <!-- Logo al final, siempre lo mejor aquí -->
+  <div class="imagen-container" style="justify-content: center;">
+    <img src="../../../assets/logo.png" alt="logo">
+  </div>
 </ion-content>
+
+
+
+
+
+
+
+
+
+
+
+<!-- Código descartado o comentado por razones de optimización o cambios de diseño -->
+<!-- 
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>Préstamos de la Semana</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <p>Contador semanal de préstamos que estaba en el diseño original, pero se descartó para simplificar la visualización y no generar sobrecarga de información.</p>
+  </ion-card-content>
+</ion-card>
+-->
+
+<!-- 
+<ion-button expand="block" color="secondary" (click)="downloadData()">Descargar Datos</ion-button>
+Este botón fue desactivado temporalmente por problemas de integración con la base de datos. Se planea activarlo en la siguiente versión.
+-->
+
+<!-- 
+<ion-card *ngFor="let prestamo of prestamosSemana">
+  <ion-card-header>
+    <ion-card-title>{{prestamo.nombreCliente}} - {{prestamo.numeroRodado}}</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <p>{{prestamo.fecha}}</p>
+  </ion-card-content>
+</ion-card>
+Esta sección de préstamos de la semana se había incluido para mostrar los préstamos recientes, pero fue eliminada debido a que generaba un exceso de consultas a la base de datos.
+-->

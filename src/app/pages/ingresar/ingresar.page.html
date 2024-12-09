@@ -1,69 +1,122 @@
+<!-- **Encabezado épico**: El portal al mundo de los clientes -->
 <ion-header>
   <ion-toolbar style="--background: #df001f;">
+    <!-- Botón para huir elegantemente hacia la página anterior -->
     <ion-buttons slot="start">
       <ion-back-button default-href="#" text="Volver" style="color: black;"></ion-back-button>
     </ion-buttons>
-
+    <!-- Título principal de esta sección (porque el caos necesita organización) -->
     <ion-title style="color: white;">Ingresar Cliente</ion-title>
   </ion-toolbar>
 </ion-header>
+
+<!-- **Zona mágica del contenido**: Aquí empieza todo el formulario -->
 <ion-content [fullscreen]="true">
-  
-  <!-- Formulario para ingresar cliente -->
-  <form [formGroup]="clienteForm" (ngSubmit)="onSubmit()" class="form-container"> <!-- El formulario se hace a partir del formGroup en .ts y hace la función onSubmit() -->
-    <!-- Item Formulario -->
+
+  <!-- **Formulario del cliente**: Donde recolectamos toda la data (con estilo, validación, y amor claro) -->
+  <form [formGroup]="clienteForm" (ngSubmit)="onSubmit()" class="form-container">
+    <!-- **Campo del RUT**: El dato más chileno de todos, con formato automático porque podemos :) -->
     <ion-item class="bordes">
-      <ion-input labelPlacement="floating" formControlName="rut" appRutFormateo [attr.maxlength]="isChecked ? null : 12" [isChecked]="isChecked" > <!-- Input de RUT, se formatea automáticamente con punto y guión mientras se escribe. -->
-        <div slot="label" style="color:black">Rut <ion-text color="danger">*</ion-text></div> <!-- Campo Obligatorio -->
+      <ion-input 
+        labelPlacement="floating" 
+        formControlName="rut" 
+        appRutFormateo 
+        [attr.maxlength]="isChecked ? null : 12" 
+        [isChecked]="isChecked"> 
+        <!-- Etiqueta atractiva que dice "¡Escribe aquí, por favor! porque por allá no hay nada xd" -->
+        <div slot="label" style="color:black">Rut <ion-text color="danger">*</ion-text></div>
       </ion-input>
-      <ion-button (click)="buscarCliente()" id="buscarCliente">Buscar Cliente</ion-button> <!-- Botón para hacer la funcion buscarCliente -->
+      <!-- Botón para buscar clientes (con un clic, obvio, lo de automático para una futura update) -->
+      <ion-button (click)="buscarCliente()" id="buscarCliente">Buscar Cliente</ion-button>
     </ion-item>
 
-      <ion-checkbox style="color:black" labelPlacement="start" justify="start" formControlName="isChecked" (ionChange)="checkboxChange()">Extranjero (Opcional)</ion-checkbox>
+    <!-- **Checkbox de extranjeros**: Porque no todos tienen RUT chileno y hermanos de otra patria, vienen muchos -->
+    <ion-checkbox 
+      style="color:black" 
+      labelPlacement="start" 
+      justify="start" 
+      formControlName="isChecked" 
+      (ionChange)="checkboxChange()">Extranjero (Opcional)</ion-checkbox>
 
-    <!-- Item Formulario -->
+    <!-- **Campo del nombre**: No queremos clientes anónimos, ¿verdad? -->
     <ion-item class="bordes">
       <ion-input labelPlacement="floating" formControlName="nombre" minLength="3">
-        <div slot="label" style="color:black" >Nombre <ion-text color="danger">*</ion-text></div>  <!-- Campo Obligatorio -->
-      </ion-input>
-    </ion-item>
-  
-    <!-- Item Formulario -->
-    <ion-item class="bordes">
-      <ion-input labelPlacement="floating" formControlName="correo" >
-        <div slot="label" style="color:black">Correo <ion-text color="danger">*</ion-text></div> <!-- Campo Obligatorio -->
+        <div slot="label" style="color:black">Nombre <ion-text color="danger">*</ion-text></div>
       </ion-input>
     </ion-item>
 
-    <!-- Item Formulario -->
+    <!-- **Campo del correo**: Donde confirmamos que no somos robots... ¿o si? -->
+    <ion-item class="bordes">
+      <ion-input labelPlacement="floating" formControlName="correo">
+        <div slot="label" style="color:black">Correo <ion-text color="danger">*</ion-text></div>
+      </ion-input>
+    </ion-item>
+
+    <!-- **Campo del teléfono**: Porque si no llegan empezamos a presionar llamando! -->
     <ion-item class="bordes">
       <ion-input labelPlacement="floating" formControlName="telefono" maxLength="12" style="color: black;">
-        <div slot="label" style="color:black">Teléfono <ion-text color="danger">*</ion-text></div> <!-- Campo Obligatorio -->
-      </ion-input>
-    </ion-item>
-    
-    <!-- Item Formulario -->
-    <ion-item class="bordes" style="margin-bottom: 50px;">
-      <ion-input labelPlacement="floating" formControlName="numeroRodado">
-        <div slot="label" style="color:black">Número de Rodado <ion-text color="danger">*</ion-text></div> <!-- Campo Obligatorio -->
+        <div slot="label" style="color:black">Teléfono <ion-text color="danger">*</ion-text></div>
       </ion-input>
     </ion-item>
 
-    <!-- Item Formulario Selección Rodado-->
+    <!-- **Campo del número de rodado**: Para buscar sea mas rápido viendo el número y buscandolo en la lista -->
+    <ion-item class="bordes" style="margin-bottom: 50px;">
+      <ion-input labelPlacement="floating" formControlName="numeroRodado">
+        <div slot="label" style="color:black">Número de Rodado <ion-text color="danger">*</ion-text></div>
+      </ion-input>
+    </ion-item>
+
+    <!-- **Segmento de selección de rodado**: Porque no todos los rodados son iguales, sillas/coches, ya sabes -->
     <ion-item class="bordes">
-      <ion-segment (ionChange)="onSegmentChange($event)"> <!-- Segment para seleccionar el tipo de rodado -->
-        <ion-segment-button style="color:black" value="Silla de Ruedas"> <!-- Opción Silla de Ruedas -->
+      <ion-segment (ionChange)="onSegmentChange($event)">
+        <!-- Opción: Silla de ruedas -->
+        <ion-segment-button style="color:black" value="Silla de Ruedas">
           <img src="../../../assets/sillaRuedas.png" alt="Silla de Ruedas" class="option-image">
         </ion-segment-button>
-        <ion-segment-button style="color:black"  value="Coche"> <!-- Opción Coche -->
+        <!-- Opción: Coche -->
+        <ion-segment-button style="color:black" value="Coche">
           <img style="width: 85%;" src="../../../assets/coche.png" alt="Coche" class="option-image">
         </ion-segment-button>
       </ion-segment>
     </ion-item>
-    
-    <!-- Item Formulario -->
-    <ion-button type="submit" id="submit">Solicitar Préstamo</ion-button> <!-- Botón para enviar el formulario -->
+
+    <!-- **Botón final**: El momento de la verdad porfavor que salga bien xd -->
+    <ion-button type="submit" id="submit">Solicitar Préstamo</ion-button>
   </form> 
-  <!-- Fin del formulario -->
+  <!-- Fin del formulario ¡MISSION COMPLETE! -->
 
 </ion-content>
+
+
+
+
+
+
+  <!-- **Código abandonado para validación extra del RUT**:
+  Esta parte fue planificada para una validación adicional del RUT, pero nunca llegó a ser implementada ya que se optó por un mejor enfoque en el servicio backend -->
+  <!-- <script>
+    function validarRut(rut) {
+      let rutFormateado = rut.replace(/\./g, '').replace('-', '');
+      if (rutFormateado.length !== 9) return false; // Rut debe tener 9 caracteres
+      let cuerpo = rutFormateado.slice(0, -1);
+      let dv = rutFormateado.slice(-1).toUpperCase();
+      let suma = 0;
+      let multiplo = 2;
+      for (let i = cuerpo.length - 1; i >= 0; i--) {
+        suma += cuerpo[i] * multiplo;
+        multiplo = multiplo === 7 ? 2 : multiplo + 1;
+      }
+      let dvCalculado = 11 - (suma % 11);
+      dvCalculado = dvCalculado === 11 ? '0' : dvCalculado === 10 ? 'K' : dvCalculado.toString();
+      return dv === dvCalculado;
+    }
+  </script> -->
+
+  <!-- **Código para una opción de buscar clientes desde la base de datos**: 
+  Este bloque estaba destinado a buscar un cliente al ingresar el RUT, pero se cambió la lógica para hacer una llamada directa al backend -->
+  <!-- <ion-button (click)="buscarCliente()" id="buscarCliente">Buscar Cliente</ion-button> -->
+
+
+
+
+

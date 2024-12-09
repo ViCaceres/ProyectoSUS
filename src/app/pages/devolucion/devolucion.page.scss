@@ -19,3 +19,10 @@ ion-content {
     place-items: center;
     height: 300px;
 }
+
+.horizontal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Espacio horizontal entre los botones */
+  }
+  

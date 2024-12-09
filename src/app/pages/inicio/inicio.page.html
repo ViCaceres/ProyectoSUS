@@ -1,19 +1,23 @@
+<!-- **Encabezado transparente**: Minimalismo al máximo -->
 <ion-header [translucent]="true">
-  
+  <!-- Este espacio es intencionalmente vacío porque la simplicidad también tiene estilo  -->
 </ion-header>
 
+<!-- **Contenido principal de la página**: Todo comienza aquí -->
 <ion-content class="homepage">
-  <!-- Logo inicial de la vista -->
+
+  <!-- **Logo inicial**: Para dar la bienvenida con branding impecable, QUE BONITO NO? -->
   <div class="logoInicial">
+    <!-- Imagen del logo inicial (estilo empresarial, claro) -->
     <img src="../../../assets/logoInicial.png" alt="">
   </div>
 
-  <!-- Botones de la vista -->
-  <ion-list >
-    <!-- Grid de botones -->
+  <!-- **Lista de opciones**: Porque los usuarios necesitan un menú rápido, el inicio de sesión esta sobrevalorado -->
+  <ion-list>
+    <!-- **Grid de botones**: Todo organizado como en un tablero de ajedrez -->
     <ion-grid>
 
-      <!-- Botón de ingresar -->
+      <!-- **Botón de ingreso**: Abre las puertas al formulario de clientes -->
       <ion-row>
         <ion-col>
           <ion-button shape="default" routerLink="/ingresar">
@@ -22,7 +26,7 @@
         </ion-col>
       </ion-row>
 
-      <!-- Botón de devolución -->
+      <!-- **Botón de devolución**: El portal a las devoluciones rápidas y eficientes, nuestra principal misión de proyecto -->
       <ion-row>
         <ion-col>
           <ion-button routerLink="/devolucion">
@@ -31,7 +35,7 @@
         </ion-col>
       </ion-row>
 
-      <!-- Botón de stock -->
+      <!-- **Botón de stock**: El rincón del inventario, donde todo está bajo control, con mas funciones que nunca ;) -->
       <ion-row>
         <ion-col>
           <ion-button routerLink="/stock">
@@ -43,8 +47,31 @@
     </ion-grid>
   </ion-list>
 
-  <!-- Logo de la vista -->
-  <div class="imagen-container" >
+  <!-- **Logo final**: La firma visual de esta vista -->
+  <div class="imagen-container">
+    <!-- Imagen de logo decorativa para un cierre visual elegante -->
     <img src="../../../assets/logo.png" alt="logo">
-      </div>
+  </div>
+
 </ion-content>
+
+
+
+<!-- **Código abandonado para navegación avanzada**:
+    Este bloque estaba destinado a crear una navegación más avanzada entre secciones, como "Historial de préstamos" y "Configuración de usuario", pero se optó por simplificar el flujo de trabajo -->
+  <!--
+  <ion-row>
+    <ion-col>
+      <ion-button routerLink="/historial">
+        Historial de Préstamos
+      </ion-button>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-button routerLink="/configuracion">
+        Configuración
+      </ion-button>
+    </ion-col>
+  </ion-row>
+  -->

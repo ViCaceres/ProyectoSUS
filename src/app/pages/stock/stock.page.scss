@@ -8,6 +8,16 @@ h2{
     justify-content: center;
     color: black;
 }
+.contador{
+
+    width: 95vw;
+    margin: auto;
+    margin-top: 20px;
+}
+.buscador{  
+    width: 95vw;
+    margin: auto;
+}
 
 .contador p,.contador ion-card{
     font-size: 20px;
@@ -15,10 +25,36 @@ h2{
     background-color: #fafafa;
 
 }
-.prestamos ion-card{
+/*.prestamos ion-card{
     background-color: #fafafa;
     border: 1px solid #000;
-}
+    width: 90vw;
+    margin: auto;
+}*/
+.prestamos {
+    padding: 20px; /* Espacio alrededor del contenido */
+  }
+  
+  ion-card {
+    background-color: #fafafa; /* Fondo blanco */
+    color: #000; /* Asegura que el texto sea oscuro */
+    margin-bottom: 20px; /* Espacio entre cada tarjeta */
+    border: 1px solid #ccc; /* Borde alrededor del ion-card */
+    border-radius: 8px; /* Bordes redondeados */
+    padding: 15px; /* Espacio interno */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  }
+  
+  ion-card-header {
+    padding-bottom: 10px; /* Espacio debajo del encabezado */
+    border-bottom: 1px solid #eee; /* Línea separadora en el header */
+    margin-bottom: 10px; /* Espacio entre el header y el contenido */
+  }
+  
+  .header-notification {
+    margin-top: 10px; /* Espacio entre notificaciones */
+  }
+  
 
 ion-content{
     --background: white;
@@ -82,3 +118,22 @@ ion-card-title{
 canvas{
     margin-top: 10%;
 }
+
+.imagen-container {
+    display: grid;               /* Habilita Grid */
+    place-items: center;         /* Centra horizontal y verticalmente */
+    height: 200px;               /* Ajusta la altura del contenedor según sea necesario */
+  }
+
+ion-modal {
+    --background: #fafafa; /* Fondo del modal */
+  }
+  
+  ion-datetime {
+    --background: #666; /* Fondo del selector de fecha */
+    --color: #000; /* Color del texto */
+    --placeholder-color: #000; /* Color del texto placeholder */
+    --picker-background: #fafafa; /* Fondo del calendario */
+    --highlight-color:  #000000; /* Color de los días seleccionados */
+  }
+  
